@@ -11,10 +11,10 @@ jobs:
     name: "Publish HEAD Version Artifact"
     runs-on: self-hosted
     permissions:
-      repository-projects: read
-      contents: read
+      repository-projects: write
+      contents: write
       packages: write
-      checks: read
+      checks: write
     steps:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
@@ -31,3 +31,4 @@ jobs:
       contents: write
       packages: write
     uses: touchlab/KMMBridgeGithubWorkflow/.github/workflows/faktorybuildbranches.yml@v0.8
+    needs: dev
