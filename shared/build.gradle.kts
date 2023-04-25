@@ -1,6 +1,8 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    id("co.touchlab.faktory.kmmbridge")
+    `maven-publish`
 }
 
 kotlin {
@@ -60,3 +62,47 @@ android {
         targetSdk = 33
     }
 }
+
+addGithubPackagesRepository()
+kmmbridge {
+
+    //  x-SNAPSHOT - Demo builds
+    //  x-DEV - Dev build
+    //  x.x - Production build
+
+//    val versionType: String = System.getenv("VERSION_TYPE") ?: ""
+//
+//    if (versionType.isNotEmpty()) {
+//        // versionType could equal '-Snapshot' for example. We append it on the end of the release name below.
+//
+//        versionWriter.set(
+//            SuffixedVersionWriter(
+//                versionType,
+//                co.touchlab.faktory.versionmanager.GitRemoteVersionWriter()
+//            )
+//        )
+//    }
+//
+//    println("Test print, the version that is passed: " + versionType)
+
+    mavenPublishArtifacts()
+    githubReleaseVersions()
+    spm()
+
+}
+
+//private class SuffixedVersionWriter(private val suffix: String, private val delegate: co.touchlab.faktory.versionmanager.VersionWriter): co.touchlab.faktory.versionmanager.VersionWriter by delegate {
+//    override fun scanVersions(project: Project, block: (Sequence<String>) -> Unit) {
+//        delegate.scanVersions(project) { sequence ->
+//            block(sequence.map { it.removeSuffix(suffix) })
+//        }
+//    }
+//
+//    override fun writeMarkerVersion(project: Project, version: String) {
+//        delegate.writeMarkerVersion(project, version + suffix)
+//    }
+//
+//    override fun writeFinalVersion(project: Project, version: String) {
+//        delegate.writeFinalVersion(project, version + suffix)
+//    }
+//}
