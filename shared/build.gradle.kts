@@ -70,11 +70,10 @@ kmmbridge {
     //  x-DEV - Dev build
     //  x.x - Production build
 
-    val versionType: String = System.getenv("VERSION_TYPE") ?: ""
+    val versionType = project.property("versiontype")?.toString().orEmpty()
 
     if (versionType.isNotEmpty()) {
         // versionType could equal '-Snapshot' for example. We append it on the end of the release name below.
-
         versionWriter.set(
             SuffixedVersionWriter(
                 versionType,
@@ -83,7 +82,7 @@ kmmbridge {
         )
     }
 
-    println("Test print, the version that is passed: " + versionType)
+    println("The version that is passed: " + versionType)
 
     mavenPublishArtifacts()
     githubReleaseVersions()
