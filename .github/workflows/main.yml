@@ -1,10 +1,31 @@
-name: KMM Bridge/iOS Publish
+name: Publish HEAD
 on:
   workflow_dispatch:
-#  push:
-#    branches:
-#      - "main"
+    inputs:
+      branch:
+        description: "Branch to be published"
+        required: true
+        default: "main"
 jobs:
+  dev:
+    name: "Publish HEAD Version Artifact"
+    runs-on: self-hosted
+    permissions:
+      repository-projects: read
+      contents: read
+      packages: write
+      checks: read
+    steps:
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      - name: Grant Permission for Gradlew to Execute
+        run: chmod +x gradlew
+      - name: Get HEAD name
+        run: |
+          export HASH_NAME=`git rev-parse --short HEAD`
+          echo "hash_name=$HASH_NAME" >> $GITHUB_ENV
+      - name: Set environment variable
+        run: echo "export VERSION_TYPE=SNAPSHOT-$HASH_NAME" >> $GITHUB_ENV
   call-kmmbridge-publish:
     permissions:
       contents: write
